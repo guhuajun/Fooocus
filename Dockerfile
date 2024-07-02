@@ -1,4 +1,6 @@
-FROM nvidia/cuda:12.4.1-base-ubuntu22.04
+# FROM nvidia/cuda:12.4.1-base-ubuntu22.04
+FROM 192.168.0.96:5000/cyberfantasy2024/cfbase:202406
+
 ENV DEBIAN_FRONTEND noninteractive
 ENV CMDARGS --listen
 
@@ -11,8 +13,8 @@ COPY requirements_docker.txt requirements_versions.txt /tmp/
 RUN pip install --no-cache-dir -r /tmp/requirements_docker.txt -r /tmp/requirements_versions.txt && \
 	rm -f /tmp/requirements_docker.txt /tmp/requirements_versions.txt
 RUN pip install --no-cache-dir xformers==0.0.23 --no-dependencies
-RUN curl -fsL -o /usr/local/lib/python3.10/dist-packages/gradio/frpc_linux_amd64_v0.2 https://cdn-media.huggingface.co/frpc-gradio-0.2/frpc_linux_amd64 && \
-	chmod +x /usr/local/lib/python3.10/dist-packages/gradio/frpc_linux_amd64_v0.2
+ADD frpc_linux_amd64 /usr/local/lib/python3.10/dist-packages/gradio/frpc_linux_amd64_v0.2
+RUN chmod +x /usr/local/lib/python3.10/dist-packages/gradio/frpc_linux_amd64_v0.2
 
 RUN adduser --disabled-password --gecos '' user && \
 	mkdir -p /content/app /content/data
